@@ -6,47 +6,57 @@ const inspectWithKind = require('inspect-with-kind');
 const formatter = Symbol('formatter');
 const round = Symbol('round');
 const spacer = Symbol('spacer');
+const setWithoutArgumentLengthValidation = Symbol('setWithoutArgumentLengthValidation');
 
-const unsupportedOptions = [
+const unsupportedOptions = new Set([
   'exponent',
   'fullform',
   'fullforms',
   'output',
   'suffixes'
-];
+]);
 
 function validateNumber(num, name) {
+  let error;
+
   if (typeof num !== 'number') {
-    throw new TypeError(`Expected ${name} to be a non-negative number, but got ${
+    error = new TypeError(`Expected ${name} to be a non-negative number, but got ${
       inspectWithKind(num)
     }.`);
+  } else if (num < 0) {
+    error = new RangeError(`Expected ${name} to be a non-negative number, but got a negative value ${num}.`);
+  } else if (!Number.isFinite(num)) {
+    error = new RangeError(`Expected ${name} to be a non-negative finite number, but got ${num}.`);
+  } else if (num > Number.MAX_SAFE_INTEGER) {
+    error = new RangeError(`Expected ${name} to be a non-negative safe number, but got a too large number.`);
   }
 
-  if (num < 0) {
-    throw new RangeError(`Expected ${name} to be a non-negative number, but got a negative value ${num}.`);
+  if (!error) {
+    return;
   }
 
-  if (!Number.isFinite(num)) {
-    throw new RangeError(`Expected ${name} to be a non-negative finite number, but got ${num}.`);
-  }
-
-  if (num > Number.MAX_SAFE_INTEGER) {
-    throw new RangeError(`Expected ${name} to be a non-negative safe number, but got a too large number.`);
-  }
+  Error.captureStackTrace(error, validateNumber);
+  throw error;
 }
 
 module.exports = class SizeRate {
-  constructor(options) {
-    if (!options || typeof options !== 'object' || Array.isArray(options)) {
+  constructor(...args) {
+    const argLen = args.length;
+
+    if (argLen !== 1) {
+      throw new RangeError(`Expected 1 argument (<Object>), but got ${
+        argLen === 0 ? 'no' : argLen
+      } arguments.`);
+    }
+
+    if (!args[0] || typeof args[0] !== 'object' || Array.isArray(args[0])) {
       throw new TypeError(`Expected an object to specify SizeRate options, but got ${
-        inspectWithKind(options)
+        inspectWithKind(args[0])
       }.`);
     }
 
-    validateNumber(options.max, '`max` option');
-
     for (const unsupportedOption of unsupportedOptions) {
-      const val = options[unsupportedOption];
+      const val = args[0][unsupportedOption];
 
       if (val !== undefined) {
         throw new Error(`\`${unsupportedOption}\` option is not supported, but ${
@@ -55,21 +65,20 @@ module.exports = class SizeRate {
       }
     }
 
-    options = Object.assign({
+    const options = Object.assign({
       base: 10,
       round: 2,
       spacer: ' ',
       standard: 'iec'
-    }, options, {output: 'array'});
+    }, args[0], {output: 'array'});
+
+    validateNumber(options.max, '`max` option');
 
     Object.defineProperty(this, round, {value: options.round});
     Object.defineProperty(this, spacer, {value: options.spacer});
 
-    const result = filesize(options.max, options);
-    const value = result[0].toFixed(options.round);
-    const symbol = result[1];
-
-    this.denominator = `${value}${options.spacer}${symbol}`;
+    const [value, symbol] = filesize(options.max, options);
+    this.denominator = `${value.toFixed(options.round)}${options.spacer}${symbol}`;
 
     Object.defineProperty(this, formatter, {
       value: filesize.partial(Object.assign(options, {
@@ -85,19 +94,31 @@ module.exports = class SizeRate {
     this.bytes = 0;
   }
 
-  set(num) {
-    validateNumber(num, 'an argument of `format` method');
+  set(...args) {
+    const argLen = args.length;
 
-    if (num > this.max) {
-      throw new RangeError(`Expected a number no larger than the max bytes (${this.max}), but got ${num}.`);
+    if (argLen !== 1) {
+      throw new RangeError(`Expected 1 argument (<number>), but got ${
+        argLen === 0 ? 'no' : argLen
+      } arguments.`);
     }
 
-    this.bytes = num;
+    const [num] = args;
+
+    validateNumber(num, 'an argument of `set` method');
+    this[setWithoutArgumentLengthValidation](num);
   }
 
-  format(num) {
-    if (num !== undefined) {
-      this.set(num);
+  format(...args) {
+    const argLen = args.length;
+
+    if (argLen > 1) {
+      throw new RangeError(`Expected 0 or 1 argument (<number>), but got ${argLen} arguments.`);
+    }
+
+    if (argLen === 1) {
+      validateNumber(args[0], 'an argument of `format` method');
+      this[setWithoutArgumentLengthValidation](args[0]);
     }
 
     const result = this[formatter](this.bytes);
@@ -106,3 +127,19 @@ module.exports = class SizeRate {
   }
 };
 
+function internalSet(num) {
+  if (num > this.max) {
+    const error = new RangeError(`Expected a number no larger than the max bytes (${
+      this.max
+    }), but got ${num}.`);
+
+    Error.captureStackTrace(error, internalSet);
+    throw error;
+  }
+
+  this.bytes = num;
+}
+
+Object.defineProperty(module.exports.prototype, setWithoutArgumentLengthValidation, {
+  value: internalSet
+});

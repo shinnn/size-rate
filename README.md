@@ -1,6 +1,6 @@
 # size-rate
 
-[![NPM version](https://img.shields.io/npm/v/size-rate.svg)](https://www.npmjs.com/package/size-rate)
+[![npm version](https://img.shields.io/npm/v/size-rate.svg)](https://www.npmjs.com/package/size-rate)
 [![Build Status](https://travis-ci.org/shinnn/size-rate.svg?branch=master)](https://travis-ci.org/shinnn/size-rate)
 [![Coverage Status](https://img.shields.io/coveralls/shinnn/size-rate.svg)](https://coveralls.io/github/shinnn/size-rate?branch=master)
 
@@ -37,7 +37,7 @@ Usually, without string length unification, you ought to get more restless outpu
 
 ## Installation
 
-[Use npm.](https://docs.npmjs.com/cli/install)
+[Use](https://docs.npmjs.com/cli/install) [npm](https://docs.npmjs.com/getting-started/what-is-npm).
 
 ```
 npm install size-rate
@@ -51,8 +51,8 @@ const SizeRate = require('size-rate');
 
 ### class SizeRate(*options*)
 
-*options*: `string` (single-line string)  
-Return: `string`
+*options*: `Object`  
+Return: `Object`
 
 #### options
 
