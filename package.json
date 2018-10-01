@@ -1,38 +1,42 @@
 {
-  "name": "size-rate",
-  "version": "0.1.0",
-  "description": "Format current and maximum bytes into a human-readable expression",
-  "repository": "shinnn/size-rate",
-  "author": "Shinnosuke Watanabe (https://github.com/shinnn)",
-  "scripts": {
-    "pretest": "eslint --fix --format=codeframe benchmark.js index.js test.js",
-    "test": "nyc --reporter=html --reporter=text node test.js"
-  },
-  "license": "CC0-1.0",
-  "files": [
-    "index.js"
-  ],
-  "keywords": [
-    "size",
-    "rate",
-    "max",
-    "byte",
-    "bytes",
-    "kilobyte",
-    "kibibyte",
-    "format"
-  ],
-  "dependencies": {
-    "filesize": "^3.5.10",
-    "inspect-with-kind": "^1.0.2"
-  },
-  "devDependencies": {
-    "@shinnn/eslint-config-node": "^4.0.2",
-    "eslint": "^4.2.0",
-    "nyc": "^11.0.3",
-    "tape": "^4.7.0"
-  },
-  "eslintConfig": {
-    "extends": "@shinnn/node"
-  }
+	"name": "size-rate",
+	"version": "0.1.0",
+	"description": "Format current and maximum bytes into a human-readable expression",
+	"repository": "shinnn/size-rate",
+	"author": "Shinnosuke Watanabe (https://github.com/shinnn)",
+	"license": "CC0-1.0",
+	"scripts": {
+		"pretest": "eslint .",
+		"test": "nyc node test.js"
+	},
+	"files": [
+		"index.js"
+	],
+	"keywords": [
+		"size",
+		"rate",
+		"max",
+		"byte",
+		"bytes",
+		"kilobyte",
+		"kibibyte",
+		"format"
+	],
+	"dependencies": {
+		"filesize": "^3.6.1",
+		"inspect-with-kind": "^1.0.5"
+	},
+	"devDependencies": {
+		"@shinnn/eslint-config": "^6.7.1",
+		"eslint": "^5.6.1",
+		"nyc": "^13.0.1",
+		"nyc-config-common": "^1.0.0",
+		"tape": "^4.9.1"
+	},
+	"eslintConfig": {
+		"extends": "@shinnn"
+	},
+	"nyc": {
+		"extends": "nyc-config-common"
+	}
 }
