@@ -65,12 +65,14 @@ module.exports = class SizeRate {
 			}
 		}
 
-		const options = Object.assign({ // eslint-disable-line prefer-object-spread
+		const options = {
 			base: 10,
 			round: 2,
 			spacer: ' ',
-			standard: 'iec'
-		}, args[0], {output: 'array'});
+			standard: 'iec',
+			...args[0],
+			output: 'array'
+		};
 
 		validateNumber(options.max, '`max` option');
 
@@ -82,7 +84,7 @@ module.exports = class SizeRate {
 
 		Object.defineProperty(this, formatter, {
 			value: filesize.partial(Object.assign(options, {
-				exponent: filesize(options.max, Object.assign({}, options, {output: 'exponent'})) // eslint-disable-line prefer-object-spread
+				exponent: filesize(options.max, {...options, output: 'exponent'})
 			}))
 		});
 
