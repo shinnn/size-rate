@@ -12,8 +12,7 @@ const unsupportedOptions = new Set([
 	'exponent',
 	'fullform',
 	'fullforms',
-	'output',
-	'suffixes'
+	'output'
 ]);
 
 function validateNumber(num, name) {

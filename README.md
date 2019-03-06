@@ -1,7 +1,7 @@
 # size-rate
 
 [![npm version](https://img.shields.io/npm/v/size-rate.svg)](https://www.npmjs.com/package/size-rate)
-[![Build Status](https://travis-ci.org/shinnn/size-rate.svg?branch=master)](https://travis-ci.org/shinnn/size-rate)
+[![Build Status](https://travis-ci.com/shinnn/size-rate.svg?branch=master)](https://travis-ci.com/shinnn/size-rate)
 [![Coverage Status](https://img.shields.io/coveralls/shinnn/size-rate.svg)](https://coveralls.io/github/shinnn/size-rate?branch=master)
 
 Format current and maximum bytes into a human-readable expression
@@ -37,7 +37,7 @@ Usually, without string length unification, you ought to get more restless outpu
 
 ## Installation
 
-[Use](https://docs.npmjs.com/cli/install) [npm](https://docs.npmjs.com/getting-started/what-is-npm).
+[Use](https://docs.npmjs.com/cli/install) [npm](https://docs.npmjs.com/about-npm/).
 
 ```
 npm install size-rate
@@ -60,7 +60,7 @@ Options are directly passed to [filesize.js](https://github.com/avoidwork/filesi
 
 * [`base`](https://github.com/avoidwork/filesize.js#base) option defaults to `10` instead of `2`.
 * [`standard`](https://github.com/avoidwork/filesize.js#standard) option defaults to `iec`.
-* [`exponent`](https://github.com/avoidwork/filesize.js#exponent), [`fullform`](https://github.com/avoidwork/filesize.js#fullform), [`fullforms`](https://github.com/avoidwork/filesize.js#fullforms), [`output`](https://github.com/avoidwork/filesize.js#output) and [`suffixes`](https://github.com/avoidwork/filesize.js#suffixes-deprecated-use-symbols) options are not supported.
+* [`exponent`](https://github.com/avoidwork/filesize.js#exponent), [`fullform`](https://github.com/avoidwork/filesize.js#fullform), [`fullforms`](https://github.com/avoidwork/filesize.js#fullforms) and [`output`](https://github.com/avoidwork/filesize.js#output) options are not supported.
 
 Also you need to set the following option:
 
@@ -147,4 +147,4 @@ sizeRate.bytes;
 
 ## License
 
-[ISC License](./LICENSE) © 2018 Shinnosuke Watanabe
+[ISC License](./LICENSE) © 2018 - 2019 Shinnosuke Watanabe
