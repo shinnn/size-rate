@@ -1,6 +1,6 @@
 {
 	"name": "size-rate",
-	"version": "0.3.0",
+	"version": "0.3.1",
 	"description": "Format current and maximum bytes into a human-readable expression",
 	"author": "Shinnosuke Watanabe (https://github.com/shinnn)",
 	"repository": "shinnn/size-rate",
