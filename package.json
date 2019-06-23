@@ -2,7 +2,7 @@
 	"name": "size-rate",
 	"version": "0.3.1",
 	"description": "Format current and maximum bytes into a human-readable expression",
-	"author": "Shinnosuke Watanabe (https://github.com/shinnn)",
+	"author": "Watanabe Shinnosuke (https://github.com/shinnn)",
 	"repository": "shinnn/size-rate",
 	"license": "ISC",
 	"scripts": {
@@ -27,14 +27,16 @@
 		"inspect-with-kind": "^1.0.5"
 	},
 	"devDependencies": {
-		"@shinnn/eslint-config": "^6.9.1",
-		"eslint": "^5.15.1",
-		"nyc": "^13.3.0",
+		"@shinnn/eslint-config": "^6.10.4",
+		"babel-eslint": "^10.0.2",
+		"eslint": "^5.16.0",
+		"nyc": "^14.1.1",
 		"nyc-config-common": "^1.0.1",
 		"tape": "^4.10.1"
 	},
 	"eslintConfig": {
-		"extends": "@shinnn"
+		"extends": "@shinnn",
+		"parser": "babel-eslint"
 	},
 	"nyc": {
 		"extends": "nyc-config-common"

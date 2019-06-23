@@ -3,11 +3,7 @@
 const filesize = require('filesize');
 const inspectWithKind = require('inspect-with-kind');
 
-const formatter = Symbol('formatter');
-const round = Symbol('round');
-const spacer = Symbol('spacer');
 const setWithoutArgumentLengthValidation = Symbol('setWithoutArgumentLengthValidation');
-
 const unsupportedOptions = new Set([
 	'exponent',
 	'fullform',
@@ -39,6 +35,11 @@ function validateNumber(num, name) {
 }
 
 module.exports = class SizeRate {
+	bytes = 0;
+	#round;
+	#spacer;
+	#formatter;
+
 	constructor(...args) {
 		const argLen = args.length;
 
@@ -75,24 +76,19 @@ module.exports = class SizeRate {
 
 		validateNumber(options.max, '`max` option');
 
-		Object.defineProperty(this, round, {value: options.round});
-		Object.defineProperty(this, spacer, {value: options.spacer});
+		this.#round = options.round;
+		this.#spacer = options.spacer;
 
 		const [value, symbol] = filesize(options.max, options);
 		this.denominator = `${value.toFixed(options.round)}${options.spacer}${symbol}`;
-
-		Object.defineProperty(this, formatter, {
-			value: filesize.partial(Object.assign(options, {
-				exponent: filesize(options.max, {...options, output: 'exponent'})
-			}))
-		});
+		this.#formatter = filesize.partial(Object.assign(options, {
+			exponent: filesize(options.max, {...options, output: 'exponent'})
+		}));
 
 		Object.defineProperty(this, 'max', {
 			enumerable: true,
 			value: options.max
 		});
-
-		this.bytes = 0;
 	}
 
 	set(...args) {
@@ -122,8 +118,8 @@ module.exports = class SizeRate {
 			this[setWithoutArgumentLengthValidation](args[0]);
 		}
 
-		const result = this[formatter](this.bytes);
-		const str = `${result[0].toFixed(this[round])}${this[spacer]}${result[1]}`;
+		const [value, symbol] = this.#formatter(this.bytes);
+		const str = `${value.toFixed(this.#round)}${this.#spacer}${symbol}`;
 		return `${' '.repeat(this.denominator.length - str.length)}${str} / ${this.denominator}`;
 	}
 };
@@ -141,6 +137,5 @@ function internalSet(num) {
 	this.bytes = num;
 }
 
-Object.defineProperty(module.exports.prototype, setWithoutArgumentLengthValidation, {
-	value: internalSet
-});
+// use the provate method syntax in the future https://github.com/tc39/proposal-private-methods
+Object.defineProperty(module.exports.prototype, setWithoutArgumentLengthValidation, {value: internalSet});
