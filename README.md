@@ -1,7 +1,7 @@
 # size-rate
 
 [![npm version](https://img.shields.io/npm/v/size-rate.svg)](https://www.npmjs.com/package/size-rate)
-[![Build Status](https://travis-ci.com/shinnn/size-rate.svg?branch=master)](https://travis-ci.com/shinnn/size-rate)
+[![GitHub Actions](https://action-badges.now.sh/shinnn/size-rate)](https://wdp9fww0r9.execute-api.us-west-2.amazonaws.com/production/results/shinnn/size-rate)
 [![Coverage Status](https://img.shields.io/coveralls/shinnn/size-rate.svg)](https://coveralls.io/github/shinnn/size-rate?branch=master)
 
 Format current and maximum bytes into a human-readable expression
@@ -9,19 +9,19 @@ Format current and maximum bytes into a human-readable expression
 ```javascript
 const SizeRate = require('size-rate');
 
-const sizeRate = SizeRate({max: 100000000});
+const sizeRate = SizeRate({max: 100_000_000});
 
 sizeRate.format();
 //=> '  0.00 MB / 100.00 MB'
 
-sizeRate.set(75049821);
+sizeRate.set(75_049_821);
 
 sizeRate.format();
 //=> ' 75.05 MB / 100.00 MB'
 
-sizeRate.set(100000000);
+sizeRate.set(100_000_000);
 
-sizeRate.format(100000000);
+sizeRate.format(100_000_000);
 //=> '100.00 MB / 100.00 MB'
 ```
 
@@ -107,12 +107,12 @@ new SizeRate({max: 1024, base: 2}).format();
 Set the current size in byte displayed as a numerator.
 
 ```javascript
-const sizeRate = new SizeRate({max: 300000000, round: 1});
+const sizeRate = new SizeRate({max: 300_000_000, round: 1});
 
 sizeRate.format();
 //=> '  0.0 MB / 300.0 MB'
 
-sizeRate.set(123456789);
+sizeRate.set(123_456_789);
 
 sizeRate.format();
 //=> '123.5 MB / 300.0 MB'
