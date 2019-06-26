@@ -4,11 +4,11 @@ const SizeRate = require('.');
 const test = require('tape');
 
 test('SizeRate', t => {
-	const sizeRate = new SizeRate({max: 123456});
+	const sizeRate = new SizeRate({max: 123_456});
 
 	t.equal(
 		sizeRate.format(),
-		'  0.00 KB / 123.46 kB',
+		'  0.00 kB / 123.46 kB',
 		'should output size rate via `format` method.'
 	);
 
@@ -21,7 +21,7 @@ test('SizeRate', t => {
 	);
 
 	t.equal(
-		sizeRate.format(99999),
+		sizeRate.format(99_999),
 		'100.00 kB / 123.46 kB',
 		'should accept an argument of `format` method.'
 	);

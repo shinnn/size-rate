@@ -36,9 +36,8 @@ function validateNumber(num, name) {
 
 module.exports = class SizeRate {
 	bytes = 0;
-	#round;
-	#spacer;
-	#formatter;
+	#formatLength = 0;
+	#options;
 
 	constructor(...args) {
 		const argLen = args.length;
@@ -76,18 +75,23 @@ module.exports = class SizeRate {
 
 		validateNumber(options.max, '`max` option');
 
-		this.#round = options.round;
-		this.#spacer = options.spacer;
+		const [num, symbol] = filesize(options.max, options);
+		const denominator = num.toFixed(options.round);
 
-		const [value, symbol] = filesize(options.max, options);
-		this.denominator = `${value.toFixed(options.round)}${options.spacer}${symbol}`;
-		this.#formatter = filesize.partial(Object.assign(options, {
+		Object.defineProperties(this, {
+			max: {
+				enumerable: true,
+				value: options.max
+			},
+			template: {
+				enumerable: true,
+				value: `${options.spacer}${symbol} / ${denominator}${options.spacer}${symbol}`
+			}
+		});
+
+		this.#formatLength = denominator.length + this.template.length;
+		this.#options = Object.assign(options, {
 			exponent: filesize(options.max, {...options, output: 'exponent'})
-		}));
-
-		Object.defineProperty(this, 'max', {
-			enumerable: true,
-			value: options.max
 		});
 	}
 
@@ -118,17 +122,14 @@ module.exports = class SizeRate {
 			this[setWithoutArgumentLengthValidation](args[0]);
 		}
 
-		const [value, symbol] = this.#formatter(this.bytes);
-		const str = `${value.toFixed(this.#round)}${this.#spacer}${symbol}`;
-		return `${' '.repeat(this.denominator.length - str.length)}${str} / ${this.denominator}`;
+		const [num] = filesize(this.bytes, this.#options);
+		return `${num.toFixed(this.#options.round)}${this.template}`.padStart(this.#formatLength, ' ');
 	}
 };
 
 function internalSet(num) {
 	if (num > this.max) {
-		const error = new RangeError(`Expected a number no larger than the max bytes (${
-			this.max
-		}), but got ${num}.`);
+		const error = new RangeError(`Expected a number no larger than the max bytes (${this.max}), but got ${num}.`);
 
 		Error.captureStackTrace(error, internalSet);
 		throw error;
