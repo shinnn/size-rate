@@ -84,6 +84,12 @@ Type: `number`
 
 The current size.
 
+#### formatLength
+
+Type: `number`
+
+Length of a string [`format()`](#format) method returns.
+
 ### Instance methods
 
 #### format()
@@ -94,7 +100,7 @@ Create a string in the form `${bytes} ${unit_of_max} / ${max} ${unit_of_max}` us
 
 ```javascript
 new SizeRate({max: 1024}).format();
-//=> '0.00 KB / 1.02 kB'
+//=> '0.00 kB / 1.02 kB'
 
 new SizeRate({max: 1024, base: 2}).format();
 //=> '0.00 KiB / 1.00 KiB'
@@ -132,7 +138,7 @@ sizeRate.set(11);
 *currentBytes*: `integer` (non-negative finite integer)  
 Return: `string`
 
-Call [`set`](#setcurrentbytes) method with a given argument, then call [`format`](#format) method.
+Call [`set()`](#setcurrentbytes) method with a given argument, then call [`format()`](#format) method.
 
 ```javascript
 const sizeRate = new SizeRate({max: 7000, base: 2});
@@ -147,4 +153,4 @@ sizeRate.bytes;
 
 ## License
 
-[ISC License](./LICENSE) © 2018 - 2019 Shinnosuke Watanabe
+[ISC License](./LICENSE) © 2018 - 2019 Watanabe Shinnosuke

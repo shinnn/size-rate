@@ -6,6 +6,10 @@ const test = require('tape');
 test('SizeRate', t => {
 	const sizeRate = new SizeRate({max: 123_456});
 
+	t.equal(sizeRate.max, 123_456, 'should expose `max` instance property.');
+	t.equal(sizeRate.bytes, 0, 'should expose `bytes` instance property.');
+	t.equal(sizeRate.formatLength, 21, 'should expose `formatLength` instance property.');
+
 	t.equal(
 		sizeRate.format(),
 		'  0.00 kB / 123.46 kB',

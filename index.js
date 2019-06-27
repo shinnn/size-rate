@@ -36,7 +36,6 @@ function validateNumber(num, name) {
 
 module.exports = class SizeRate {
 	bytes = 0;
-	#formatLength = 0;
 	#options;
 
 	constructor(...args) {
@@ -89,7 +88,11 @@ module.exports = class SizeRate {
 			}
 		});
 
-		this.#formatLength = denominator.length + this.template.length;
+		Object.defineProperty(this, 'formatLength', {
+			enumerable: true,
+			value: denominator.length + this.template.length
+		});
+
 		this.#options = Object.assign(options, {
 			exponent: filesize(options.max, {...options, output: 'exponent'})
 		});
@@ -123,7 +126,7 @@ module.exports = class SizeRate {
 		}
 
 		const [num] = filesize(this.bytes, this.#options);
-		return `${num.toFixed(this.#options.round)}${this.template}`.padStart(this.#formatLength, ' ');
+		return `${num.toFixed(this.#options.round)}${this.template}`.padStart(this.formatLength);
 	}
 };
 
